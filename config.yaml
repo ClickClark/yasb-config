@@ -207,7 +207,7 @@ widgets:
       api_key: "YOUR_WEATHERAPI_KEY" # Get your free API key from https://www.weatherapi.com/
       update_interval: 600 # Update interval in seconds, Min 600 seconds
       hide_decimal: true
-      location: "Crowthorne, England" # You can use "USA Los Angeles 90006" {COUNTRY CITY ZIP_CODE}, or just city.
+      location: "London, England" # You can use "USA Los Angeles 90006" {COUNTRY CITY ZIP_CODE}, or just city.
       callbacks:
         on_left: "toggle_card"
         on_middle: "toggle_label"
