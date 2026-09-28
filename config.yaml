@@ -1,0 +1,454 @@
+watch_stylesheet: true
+watch_config: true
+debug: false
+bars:
+  status-bar:
+    enabled: true
+    style: "bar"
+    screens: ["*"]
+    class_name: "yasb-bar"
+    alignment:
+      position: "top"
+      align: "center"
+    blur_effect:
+      enabled: true
+      acrylic: false
+      dark_mode: true
+      round_corners: false
+      border_color: None
+    window_flags:
+      always_on_top: true
+      windows_app_bar: true
+    dimensions:
+      width: "100%"
+      height: 40
+    widgets:
+      left:
+        [
+          "home",
+          "komorebi_workspaces",
+          "komorebi_active_layout",
+          "taskbar",
+        ]
+      center: ["clock", 
+          "weather"
+          ]
+      right:
+        [
+          "media_lite",
+          "systray",
+          "libre_monitor",
+          "cava",
+          "wifi",
+          "battery",
+        ]
+widgets:
+  home:
+    type: "yasb.home.HomeWidget"
+    options:
+      label: "<span>\uf179</span>"
+      menu_labels:
+        about: "\ue66A  About This PC"
+        system: "\uF423  System Settings"
+        task_manager: "\uf437  Task Manager"
+        hibernate: "\uf28e  Hibernate"
+        sleep: "\u23fe   Sleep"
+        restart: "\uead2   Restart"
+        shutdown: "\uf011   Shutdown"
+        lock: "\uea75   Lock"
+        logout: "\udb80\udf43   Logout"
+      menu_list:
+        - { title: "\uE617  User Home", path: "~" }
+        - { title: "\udb80\udd20  Download", path: "~\\Downloads" }
+        - { title: "\udb80\ude1a  Documents", path: "~\\Documents" }
+        - { title: "\uf03e  Pictures", path: "~\\Pictures" }
+      system_menu: true
+      power_menu: true
+      blur: true
+      border_color: "System"
+      round_corners_type: "normal"
+  komorebi_workspaces:
+    type: "komorebi.workspaces.WorkspaceWidget"
+    options:
+      label_offline: "Komorebi Offline"
+      label_workspace_btn: "{index}"
+      label_workspace_active_btn: "{index}"
+      label_workspace_populated_btn: "{index}"
+      label_default_name: ""
+      label_float_override: "Override"
+      toggle_workspace_layer:
+        enabled: false
+        tiling_label: "Tiling"
+        floating_label: "Floating"
+      hide_if_offline: true
+      label_zero_index: false
+      hide_empty_workspaces: true
+      app_icons:
+        enabled_populated: false
+        enabled_active: false
+        size: 16
+        max_icons: 0
+        hide_label: false
+        hide_duplicates: true
+        hide_floating: true
+      enable_scroll_switching: true
+      reverse_scroll_direction: false
+  komorebi_stack:
+    type: "komorebi.stack.StackWidget"
+    options:
+      label_offline: "Komorebi Offline"
+      label_window: "{index}"
+      label_window_active: "{index}"
+      label_no_window: ""
+      label_zero_index: false
+      hide_if_offline: true
+      show_icons: "never"
+      icon_size: 16
+      show_only_stack: false
+      max_length: 20
+      max_length_active: 20
+      max_length_overall: 0
+      max_length_ellipsis: "..."
+      enable_scroll_switching: true
+      reverse_scroll_direction: false
+  komorebi_active_layout:
+    type: "komorebi.active_layout.ActiveLayoutWidget"
+    options:
+      label: "{icon}"
+      hide_if_offline: true
+      layouts:
+        - bsp
+        - columns
+        - rows
+        - grid
+        - scrolling
+        - vertical_stack
+        - horizontal_stack
+        - ultrawide_vertical_stack
+        - right_main_vertical_stack
+      layout_icons:
+        bsp: '[\]'
+        columns: '[||]'
+        rows: '[==]'
+        grid: '[G]'
+        scrolling: '[SC]'
+        vertical_stack: '[V]'
+        horizontal_stack: '[H]'
+        ultrawide_vertical_stack: '||='
+        right_main_vertical_stack: '=||'
+        monocle: '[M]'
+        maximized: '[X]'
+        floating: '><>'
+        paused: '[P]'
+        tiling: '[T]'
+      layout_menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "System"
+        alignment: "center"
+        direction: "down"
+        show_layout_icons: true
+      callbacks:
+        on_left: "next_layout"
+        on_middle: "toggle_monocle"
+        on_right: "prev_layout"
+  komorebi_control:
+    type: "komorebi.control.KomorebiControlWidget"
+    options:
+      label: "<span>\udb80\uddd9</span>"
+      icons:
+        start: "\uead3"
+        stop: "\uead7"
+        reload: "\uead2"
+      run_ahk: false
+      run_whkd: false
+      run_masir: false
+      show_version: true
+      komorebi_menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "System"
+        alignment: "left"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+  
+  clock:
+    type: "yasb.clock.ClockWidget"
+    options:
+      label: "{%a %d %b %H:%M}"
+      label_alt: "{%A, %d %B %Y, %H:%M:%S}"
+      locale: "gb_GB" # Langugae for date, you can set your own, example fr_FR
+      timezones: ["Europe/London", "Asia/Shanghai", "America/Vancouver", "America/New_York"] #Looking up time zone info from registry
+      #timezones: ["America/Montreal"]
+      callbacks:
+        on_middle: "exec cmd.exe /c start ms-clock:"
+        on_right: "next_timezone"
+      calendar:
+        blur: True
+        round_corners: True
+        round_corners_type: "normal"
+        border_color: "System"
+        alignment: "center"
+        direction: "down"
+        show_holidays: true
+        show_week_numbers: true
+        show_years: true
+        country_code: "cn"
+        holiday_color: "#FF6464"
+        
+  weather:
+    type: "yasb.weather.WeatherWidget"
+    options:
+      label: "<span>{icon}</span> {temp}"
+      label_alt: "<span>{icon}</span> {location}: {temp}, Min {min_temp}, Max {max_temp}, Wind {wind}"
+      api_key: "YOUR_WEATHERAPI_KEY" # Get your free API key from https://www.weatherapi.com/
+      update_interval: 600 # Update interval in seconds, Min 600 seconds
+      hide_decimal: true
+      location: "Crowthorne, England" # You can use "USA Los Angeles 90006" {COUNTRY CITY ZIP_CODE}, or just city.
+      callbacks:
+        on_left: "toggle_card"
+        on_middle: "toggle_label"
+        on_right: "exec cmd.exe /c start msnweather:"
+      icons:
+        sunnyDay: "\ue30d"
+        clearNight: "\ue32b"
+        cloudyDay: "\ue312"
+        cloudyNight: "\ue311"
+        rainyDay: "\ue308"
+        rainyNight: "\ue333"
+        snowyDay: "\ue30a"
+        snowyNight: "\ue335"
+        blizzardDay: "\udb83\udf36"
+        blizzardNight: "\udb83\udf36"
+        foggyDay: "\ue303"
+        foggyNight: "\ue346"
+        thunderstormDay: "\ue30f"
+        thunderstormNight: "\ue338"
+        default: "\uebaa"
+      weather_card:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "system"
+        alignment: "center"
+        direction: "down"
+        icon_size: 64
+        show_hourly_forecast: true # Set to False to disable hourly forecast
+        time_format: "24h" # can be 12h or 24h
+        hourly_point_spacing: 76
+        hourly_icon_size: 32 # better to set 16, 32 or 64 for better quality
+        icon_smoothing: true # should be true for smoother icon or false for sharper icon if using 16, 32 or 64 for hourly_icon_size
+        temp_line_width: 3 # can be 0 to hide the temperature line
+
+  libre_monitor:
+    type: "yasb.libre_monitor.LibreHardwareMonitorWidget"
+    options:
+      label: "<span>\uf4bc</span> {info[value]}{info[unit]}"
+      label_alt: "<span>\uf4bc</span> {info[histogram]} {info[value]} ({info[min]}/{info[max]}) {info[unit]}"
+      sensor_id: "/intelcpu/0/load/0"
+      update_interval: 2000
+      histogram_num_columns: 8
+      history_size: 60
+      histogram_fixed_min: 0
+      histogram_fixed_max: 100
+      class_name: "libre-monitor-widget"
+      callbacks:
+        on_left: "toggle_menu"
+        on_middle: "do_nothing"
+        on_right: "exec cmd /c Taskmgr"
+      libre_menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "System"
+        alignment: "center"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+        header_label: ""
+        precision: 1
+        columns: 1
+        sensors: # Sensor IDs can be found at http://localhost:8085/data.json
+          - { id: "/intelcpu/0/load/0", name: "CPU Load" }
+          - { id: "/ram/load/0", name: "RAM Load" }
+          - { id: "/intelcpu/0/temperature/8", name: "CPU Temp" }
+          - { id: "/intelcpu/0/power/0", name: "CPU Power" }
+
+  taskbar:
+    type: "yasb.taskbar.TaskbarWidget"
+    options:
+      icon_size: 16
+      tooltip: false
+      show_only_visible: false
+      strict_filtering: false
+      monitor_exclusive: false
+      grouping:
+        enabled: true
+        show_count: false
+      animation:
+        enabled: true
+      preview:
+        enabled: true
+        width: 450
+        delay: 400
+        padding: 12
+      ignore_apps:
+        processes: []
+        titles: []
+        classes: []
+  systray:
+    type: "yasb.systray.SystrayWidget"
+    options:
+      class_name: "systray"
+      label_collapsed: "◀"
+      label_expanded: "▶"
+      label_position: "right" # Can be "left" or "right"
+      icon_size: 16 # Can be any integer between 8 and 64
+      pin_click_modifier: "alt" # Can be "ctrl", "alt" or "shift"
+      show_unpinned: false
+      show_unpinned_button: true
+      show_battery: false
+      show_volume: false
+      show_network: true
+ 
+  battery:
+    type: "yasb.battery.BatteryWidget"
+    options:
+      label: "<span>{icon}</span> {percent}%"
+      label_alt: "<span>{icon}</span> {percent}% | {power}W | {time_remaining}"
+      update_interval: 2500
+      time_remaining_natural: False
+      hide_unsupported: True
+      charging_options:
+        icon_format: "{charging_icon}"
+        blink_charging_icon: true
+        blink_interval: 500
+      status_thresholds:
+        critical: 10
+        low: 25
+        medium: 75
+        high: 95
+        full: 100
+      status_icons:
+        icon_charging: "\uf0e7"
+        icon_critical: "\uf244"
+        icon_low: "\uf243"
+        icon_medium: "\uf242"
+        icon_high: "\uf241"
+        icon_full: "\uf240"
+
+  cava:
+    type: "yasb.cava_menu.CavaMenuWidget"
+    options:
+      class_name: "cava-menu-widget"
+      bar_height: 12
+      min_bar_height: 2
+      gradient: 0
+      foreground: "#ffffff"
+      bars_number: 8
+      bar_spacing: 2
+      bar_width: 4
+      bar_type: "bars"
+      channels: "stereo"
+      sensitivity: 100
+      framerate: 60
+      hide_empty: false
+      menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "System"
+        alignment: "center"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+        show_language: true
+      callbacks:
+        on_left: "toggle_menu"
+        on_middle: "do_nothing"
+        on_right: "do_nothing"
+
+  wifi:
+    type: "yasb.wifi.WifiWidget"
+    options:
+      label: "<span>{wifi_icon}</span>"
+      label_alt: "{wifi_name} {wifi_strength}%"
+      update_interval: 2000
+      callbacks:
+        on_left: "toggle_menu"
+        on_middle: "exec cmd.exe /c start ms-settings:network"
+        on_right: "toggle_label"
+      ethernet_label: "<span>{wifi_icon}</span>"
+      ethernet_label_alt: "<span>{wifi_icon}</span>{ip_addr}"
+      ethernet_icon: "\ueba9"
+      get_exact_wifi_strength: true  # Optional. Will require location access permission if true.
+      wifi_icons: [
+        "\udb82\udd2e",  # Icon for 0% strength
+        "\udb82\udd1f",  # Icon for 1-24% strength
+        "\udb82\udd22",  # Icon for 25-49% strength
+        "\udb82\udd25",  # Icon for 50-74% strength
+        "\udb82\udd28"   # Icon for 75-100% strength
+      ]
+      menu_config:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "System"
+        alignment: "center"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+        wifi_icons_secured: [
+          "\ue670",
+          "\ue671",
+          "\ue672",
+          "\ue673",
+        ]
+        wifi_icons_unsecured: [
+          "\uec3c",
+          "\uec3d",
+          "\uec3e",
+          "\uec3f",
+        ]
+  media_lite:
+    type: "yasb.media_lite.MediaWidget"
+    options:
+      show_thumbnail: true
+      show_title: true
+      show_artist: true
+      scrolling_label: false
+      image_size: 28
+      thumbnail_corner_radius: 6
+      max_label_size: 20
+      tooltip: true
+      callbacks:
+        on_left: "toggle_media_menu"
+        on_middle: "do_nothing"
+        on_right: "do_nothing"
+      media_menu:
+        blur: true
+        artwork_background: false
+        artwork_blur_radius: 24
+        artwork_dim: 0.55
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "System"
+        alignment: "center"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+        image_size: 160
+        thumbnail_corner_radius: 12
+        icons:
+          play: "\ue768"
+          pause: "\ue769"
+          prev_track: "\ue892"
+          next_track: "\ue893"
+          shuffle: "\ue8b1"
+          repeat: "\ue8ee"
+          repeat_one: "\ue8ed"
+          volume: "\ue767"
+          mute: "\ue994"

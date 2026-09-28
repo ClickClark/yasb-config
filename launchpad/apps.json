@@ -1,0 +1,74 @@
+[
+  {
+    "title": "Microsoft Edge",
+    "path": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Microsoft Edge.lnk",
+    "icon": "C:\\Users\\clark\\.config\\yasb\\launchpad\\icons\\microsoft_edge_1774019831742.svg",
+    "type": "app",
+    "group": null,
+    "id": 1773924164679
+  },
+  {
+    "title": "OneNote",
+    "path": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\OneNote.lnk",
+    "icon": "C:\\Users\\clark\\.config\\yasb\\launchpad\\icons\\onenote_1773924194945.png",
+    "type": "app",
+    "group": null,
+    "id": 1773924194945
+  },
+  {
+    "title": "Outline",
+    "path": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Outline.lnk",
+    "icon": "C:\\Users\\clark\\.config\\yasb\\launchpad\\icons\\outline_1773924176492.png",
+    "type": "app",
+    "group": null,
+    "id": 1773924176492
+  },
+  {
+    "title": "Visual Studio Code",
+    "path": "C:\\Users\\clark\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Visual Studio Code\\Visual Studio Code.lnk",
+    "icon": "C:\\Users\\clark\\.config\\yasb\\launchpad\\icons\\visual_studio_code_1774006751823.svg",
+    "type": "app",
+    "group": null,
+    "id": 1773924634431
+  },
+  {
+    "title": "Terminal",
+    "path": "explorer.exe shell:AppsFolder\\Microsoft.WindowsTerminal_8wekyb3d8bbwe!App",
+    "icon": "C:\\Users\\clark\\.config\\yasb\\launchpad\\icons\\terminal_1773924641492.png",
+    "type": "app",
+    "group": null,
+    "id": 1773924641493
+  },
+  {
+    "title": "Weather",
+    "path": "explorer.exe shell:AppsFolder\\Microsoft.BingWeather_8wekyb3d8bbwe!App",
+    "icon": "C:\\Users\\clark\\.config\\yasb\\launchpad\\icons\\weather_1773924665182.png",
+    "type": "app",
+    "group": null,
+    "id": 1773924665184
+  },
+  {
+    "title": "Task Manager",
+    "path": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\System Tools\\Task Manager.lnk",
+    "icon": "C:\\Users\\clark\\.config\\yasb\\launchpad\\icons\\task_manager_1773924671998.png",
+    "type": "app",
+    "group": null,
+    "id": 1773924671999
+  },
+  {
+    "title": "PowerPoint",
+    "path": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\PowerPoint.lnk",
+    "icon": "C:\\Users\\clark\\.config\\yasb\\launchpad\\icons\\powerpoint_1773924841798.png",
+    "type": "app",
+    "group": null,
+    "id": 1773924841799
+  },
+  {
+    "title": "Word",
+    "path": "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Word.lnk",
+    "icon": "C:\\Users\\clark\\.config\\yasb\\launchpad\\icons\\word_1773924847281.png",
+    "type": "app",
+    "group": null,
+    "id": 1773924847282
+  }
+]

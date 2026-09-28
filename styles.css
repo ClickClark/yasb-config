@@ -1,0 +1,1232 @@
+:root {
+  --font-name-primary: "JetBrainsMono NFP";
+  --font-name-secondary: "JetBrainsMono NFP";
+  --font-name-icons: "Segoe Fluent Icons";
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.54);
+  --text-small: 12px;
+  --text-normal: 14px;
+  --text-lg: 16px;
+  --text-xl: 18px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-5xl: 48px;
+  --text-6xl: 64px;
+  --font-normal: 400;
+  --font-bold: 600;
+  --font-bold-xl: 900;
+  --bg-taskbar: rgba(8, 8, 8, 0.15);
+  --bg-primary: rgba(8, 8, 8, 0.4);
+  --bg-secondary: rgba(28, 30, 29, 1);
+  --bg-hover-primary: rgba(255, 255, 255, 0.08);
+  --bg-hover-secondary: rgba(255, 255, 255, 0.04);
+  --bg-hover-third: rgba(255, 255, 255, 0.12);
+  --bg-hover-fourth: rgba(24, 24, 37, 0.212);
+  --color-grey: rgba(128, 130, 158, 0.3);
+  --color-dark-grey: hsla(236, 13%, 36%, 0.3);
+  --color-light-grey: rgba(186, 187, 202, 0.3);
+  --color-yellow: #fae93f;
+  --color-green: #3f925f;
+  --color-dark-green: #223a2c;
+  --color-light-green: #61ad7e;
+  --color-red: #cb3b42;
+  --color-dark-red: #5a1e22;
+  --color-light-red: #e04c52;
+  --color-light-blue: rgb(112, 157, 255);
+  --color-cyan: #52f1d2;
+  --color-sand: #d4be7c;
+  --color-accent: #ffffff;
+  --color-black: #000000;
+  --color-active: #05ec4a;
+  --color-disabled: #999999;
+  --color-volume: #cdd6f4;
+  --color-volume-muted: #a0a0a0;
+  --color-volume-unavailable: #4e525c;
+  --color-alert-border: rgba(247, 209, 42, 0.1);
+  --color-alert-text: rgba(196, 181, 162, 0.85);
+  --text-dim: #9399b2;
+  --text-muted: #7f849c;
+  --bg-popup: rgb(32, 32, 32);
+  --bg-popup-border: rgb(54, 54, 54);
+  --bg-hover-soft: rgba(190, 190, 190, 0.05);
+  --border-soft: rgba(79, 79, 79, 0.1);
+  --radius-normal: 8px;
+  --radius-xl: 20px;
+  --padding-normal: 0 8px;
+  --margin-small: 2px 0;
+  --margin-normal: 8px;
+  --margin-lg: 12px;
+  --padding-label: 0px 2px 2px 2px;
+  --gap-padding: 4px;
+  --padding-menu: 8px 48px 8px 12px;
+  --padding-volume: 12px 14px;
+  --padding-button: 4px 8px;
+  --margin-widget: 4px 0;
+  --padding-tooltip: 12px 24px;
+}
+
+* {
+  font-size: var(--text-normal);
+  color: var(--text-primary);
+  font-weight: var(--font-bold);
+  font-family: var(--font-name-primary);
+  margin: 0;
+  padding: 0;
+}
+.yasb-bar {
+  padding: var(--padding-normal);
+  margin: 0;
+  background-color: var(--bg-taskbar);
+}
+.widget {
+  padding: var(--padding-normal);
+  margin: var(--margin-widget);
+  border-radius: var(--radius-normal);
+}
+.widget:hover {
+  background-color: var(--bg-hover-primary);
+}
+.widget .label {
+  padding: var(--padding-label);
+  font-family: var(--font-name-primary);
+}
+.widget .label.alt {
+}
+.icon {
+  font-size: var(--text-xl);
+}
+
+/* Tooltip */
+.tooltip {
+  margin-top: var(--margin-small);
+  padding: var(--padding-tooltip);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-normal);
+  border: 1px solid var(--color-grey);
+  color: var(--text-primary);
+  font-size: var(--text-normal);
+  font-weight: var(--font-bold);
+}
+
+/* Home */
+.home-widget {
+}
+.home-widget .icon {
+  font-size: 20;
+}
+.home-menu {
+  background-color: var(--bg-primary);
+}
+.home-menu .menu-item {
+  padding: var(--padding-menu);
+  font-size: var(--text-normal);
+  font-weight: var(--font-bold);
+}
+.home-menu .menu-item:hover {
+  background-color: var(--bg-hover-primary);
+}
+.home-menu .separator {
+  max-height: 1px;
+  background-color: var(--color-grey);
+}
+
+/* Weather */
+.weather-widget .icon {
+  margin: 0 2px 0 0;
+}
+.weather-widget .icon.sunnyDay {
+  color: var(--color-yellow);
+}
+.weather-widget .icon.clearNight {
+  font-size: var(--text-xl);
+  color: var(--color-light-blue);
+}
+/* Weather Card */
+.weather-card {
+  background-color: var(--bg-primary);
+}
+.weather-card-today .label {
+  font-size: var(--text-normal);
+}
+.weather-card-today .label.location {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+}
+.weather-card-today .label.alert {
+  font-size: var(--text-normal);
+  font-weight: var(--font-bold);
+  border: 1px solid var(--color-alert-border);
+  color: var(--color-alert-text);
+  border-radius: var(--radius-normal);
+  padding: 5px 0;
+}
+.weather-card-day {
+  border-radius: var(--radius-normal);
+}
+
+.weather-card-day.active {
+  background-color: var(--bg-hover-secondary);
+  border: 1px solid var(--color-grey);
+}
+
+.weather-card-day:hover {
+  background-color: var(--bg-hover-primary);
+}
+
+.weather-card-day .label {
+  font-size: var(--text-normal);
+}
+
+.weather-card .hourly-container {
+  border-radius: var(--radius-normal);
+  min-height: 150px;
+  background-color: transparent;
+}
+
+.weather-card .hourly-data {
+  background-color: var(--color-yellow); /* <- Curve color */
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+}
+
+/* Clock */
+.calendar {
+  background-color: var(--bg-primary);
+}
+.calendar .calendar-table,
+.calendar .calendar-table::item {
+  background-color: transparent;
+  color: var(--text-secondary);
+  /* font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; */
+  font-size: 13px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+}
+.calendar .calendar-table::item:selected {
+  color: var(--text-primary);
+  background-color: var(--bg-hover-primary);
+  border-radius: var(--radius-normal);
+}
+.calendar .day-label,
+.calendar .month-label,
+.calendar .date-label,
+.calendar .week-label,
+.calendar .holiday-label {
+  font-family: var(--font-name-primary);
+  font-size: 13px;
+  min-width: 190px;
+  max-width: 210px;
+}
+.calendar .week-label,
+.calendar .holiday-label {
+  font-size: 11px;
+  font-weight: var(--font-bold);
+  color: var(--text-secondary);
+}
+.calendar .holiday-label {
+  color: var(--text-primary);
+  font-weight: var(--font-bold);
+}
+.calendar .month-label {
+  font-weight: normal;
+}
+.calendar .date-label {
+  font-size: 56px;
+  font-weight: var(--font-bold-xl);
+  margin-top: -8px;
+}
+
+/* Volume */
+.volume-slider {
+  padding: 8px;
+}
+.volume-slider::groove {
+}
+.volume-slider::handle {
+}
+.audio-menu {
+  background-color: var(--bg-primary);
+}
+.audio-container .device {
+  padding: var(--padding-volume);
+
+font-size: var(--text-normal);
+  border: 1px solid transparent;
+  border-radius: var(--radius-normal);
+}
+.audio-container .device.selected {
+  background-color: var(--bg-hover-secondary);
+  border: 1px solid var(--color-grey);
+}
+.audio-container .device:hover {
+  background-color: var(--bg-hover-primary);
+}
+.volume-widget .progress-circle {
+}
+
+
+/* Taskbar */
+.taskbar-widget {
+  margin-left: 2px;
+}
+.taskbar-widget:hover {
+  background-color: transparent;
+}
+.taskbar-widget .app-container {
+  border-radius: var(--radius-normal);
+  /* border-radius: 0; */
+  padding: 0 7px;
+  margin: 0 1px;
+}
+.taskbar-widget .app-container:hover {
+  background-color: var(--bg-hover-primary);
+}
+.taskbar-widget .app-container.foreground {
+  /* border-bottom: 2px solid var(--color-green); */
+  background-color: var(--bg-hover-third);
+}
+.taskbar-widget .app-container.flashing {
+  background-color: var(--color-red);
+}
+.taskbar-widget .app-container .app-title {
+  padding-left: 4px;
+}
+/* Taskbar preview popup is very limited in styling options, do not use margins/paddings here */
+.taskbar-preview {
+  border-radius: var(--radius-normal);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--color-grey);
+}
+.taskbar-preview .header {
+  padding-bottom: 18px;
+  padding-top: var(--margin-normal);
+}
+.taskbar-preview .header .title {
+  color: var(--text-primary);
+  font-weight: var(--font-bold);
+  font-size: var(--text-normal);
+}
+
+/* Komorebi */
+.komorebi-workspaces .offline-status,
+.komorebi-stack .offline-status,
+.komorebi-stack .no-window {
+  font-size: var(--text-small);
+  color: var(--text-secondary);
+  padding: var(--padding-label);
+}
+.komorebi-workspaces .widget-container,
+.komorebi-stack .widget-container {
+  margin: 0;
+  padding: 0;
+}
+
+/* Komorebi Workspaces */
+.komorebi-workspaces .ws-btn {
+  min-width: 20px;
+  max-width: 20px;
+  min-height: 20px;
+  margin: 0 1px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-normal);
+  background-color: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-name-primary);
+  font-size: var(--text-normal);
+  font-weight: var(--font-bold);
+}
+.komorebi-workspaces .ws-btn:hover {
+  background-color: var(--bg-hover-primary);
+  color: var(--text-primary);
+}
+.komorebi-workspaces .ws-btn.populated {
+  color: var(--text-primary);
+}
+.komorebi-workspaces .ws-btn.active {
+  background-color: var(--bg-hover-third);
+  color: var(--text-primary);
+}
+.komorebi-workspaces .ws-btn .label {
+  font-family: var(--font-name-primary);
+}
+.komorebi-workspaces .ws-btn .icon {
+  max-height: 14px;
+  max-width: 14px;
+}
+.komorebi-workspaces .float-override {
+  font-size: var(--text-small);
+  color: var(--color-yellow);
+  padding: 0 4px;
+}
+.komorebi-workspaces .workspace-layer {
+  font-size: var(--text-small);
+  color: var(--text-secondary);
+  padding: 0 4px;
+}
+.komorebi-workspaces .workspace-layer.tiling {
+  color: var(--color-light-green);
+}
+.komorebi-workspaces .workspace-layer.floating {
+  color: var(--color-light-red);
+}
+
+/* Komorebi Stack */
+.komorebi-stack .window {
+  padding: 0 6px;
+  margin: 0 1px;
+  border: none;
+  border-radius: var(--radius-normal);
+  background-color: transparent;
+}
+.komorebi-stack .window:hover {
+  background-color: var(--bg-hover-primary);
+}
+.komorebi-stack .window.active {
+  background-color: var(--bg-hover-third);
+}
+.komorebi-stack .window .icon {
+  margin: 0;
+  padding: 0 2px;
+}
+.komorebi-stack .window .label {
+  font-size: var(--text-small);
+  color: var(--text-secondary);
+  padding: 0 2px;
+}
+.komorebi-stack .window.active .label {
+  color: var(--text-primary);
+}
+
+/* Komorebi Active Layout */
+.komorebi-active-layout .label {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-normal);
+  padding: var(--padding-label);
+}
+.komorebi-layout-menu {
+  background-color: var(--bg-primary);
+}
+.komorebi-layout-menu .menu-item {
+  padding: 8px 14px;
+  margin: 0 4px;
+  border-radius: var(--radius-normal);
+}
+.komorebi-layout-menu .menu-item:hover {
+  background-color: var(--bg-hover-primary);
+}
+.komorebi-layout-menu .menu-item-icon {
+  font-family: var(--font-name-icons);
+  font-size: var(--text-lg);
+  min-width: 28px;
+  margin-right: 10px;
+}
+.komorebi-layout-menu .menu-item-text {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-normal);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+}
+.komorebi-layout-menu .separator {
+  max-height: 1px;
+  background-color: var(--color-grey);
+}
+
+/* Komorebi Control */
+.komorebi-control-widget .label {
+  font-family: var(--font-name-icons);
+  font-size: var(--text-lg);
+  padding: var(--padding-label);
+}
+.komorebi-control-menu {
+  background-color: var(--bg-primary);
+}
+.komorebi-control-menu .button {
+  font-family: var(--font-name-icons);
+  font-size: var(--text-3xl);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  margin: 4px;
+  border-radius: var(--radius-normal);
+  background-color: var(--bg-hover-secondary);
+}
+.komorebi-control-menu .button:hover {
+  background-color: var(--bg-hover-primary);
+  color: var(--text-primary);
+}
+.komorebi-control-menu .button.active {
+  color: var(--text-primary);
+  background-color: var(--bg-hover-secondary);
+}
+.komorebi-control-menu .button:disabled,
+.komorebi-control-menu .button.active:disabled {
+  background-color: var(--bg-hover-secondary);
+  color: var(--color-disabled);
+}
+.komorebi-control-menu .footer {
+  padding: 4px 16px 12px 16px;
+}
+.komorebi-control-menu .footer .text {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  color: var(--text-dim);
+}
+
+/* Libre Hardware Monitor */
+.libre-monitor-widget .label {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-normal);
+  padding: var(--padding-label);
+}
+.libre-menu {
+  background-color: var(--bg-primary);
+  min-width: 180px;
+}
+.libre-menu .sensor-item {
+  padding: 2px 10px;
+  margin: 1px 4px;
+  border-radius: 4px;
+  background-color: var(--bg-hover-secondary);
+}
+.libre-menu .sensor-item:hover {
+  background-color: var(--bg-hover-primary);
+}
+.libre-menu .sensor-name {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  color: var(--text-secondary);
+  padding-right: 10px;
+}
+.libre-menu .sensor-value {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  min-width: 44px;
+}
+
+/* Control Center Menu */
+.control-center-menu {
+  background-color: var(--bg-primary);
+  min-width: 260px;
+  max-width: 300px;
+  padding: 4px 0 6px 0;
+}
+.control-center-menu .cc-header {
+  padding: 6px 14px 8px 14px;
+}
+.control-center-menu .cc-header-icon {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  margin-right: 10px;
+}
+.control-center-menu .cc-title {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-normal);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+}
+.control-center-menu .cc-section {
+  font-family: var(--font-name-primary);
+  font-size: 10px;
+  font-weight: var(--font-bold);
+  color: var(--text-muted);
+  padding: 6px 14px 2px 14px;
+}
+.control-center-menu .cc-divider {
+  background-color: var(--border-soft);
+  margin: 6px 10px;
+}
+.control-center-menu .cc-refresh {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-normal);
+  color: var(--text-secondary);
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+.control-center-menu .cc-refresh:hover {
+  background-color: var(--bg-hover-primary);
+  color: var(--text-primary);
+}
+.control-center-menu .device-row,
+.control-center-menu .slider-row,
+.control-center-menu .language-row {
+  padding: 3px 14px;
+}
+.control-center-menu .device-selector {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  color: var(--text-primary);
+  background-color: var(--bg-hover-secondary);
+  border: 1px solid var(--color-grey);
+  border-radius: 6px;
+  padding: 5px 10px;
+}
+.control-center-menu .device-selector:hover {
+  background-color: var(--bg-hover-primary);
+}
+.control-center-menu .device-selector::drop-down {
+  border: none;
+  width: 18px;
+}
+.control-center-menu .device-selector::down-arrow {
+  width: 8px;
+  height: 8px;
+}
+.control-center-menu .device-selector QAbstractItemView {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--color-grey);
+  border-radius: 4px;
+  selection-background-color: var(--bg-hover-primary);
+  selection-color: var(--text-primary);
+}
+.control-center-menu .slider-icon,
+.control-center-menu .device-icon {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-normal);
+  color: var(--text-secondary);
+  min-width: 22px;
+  margin-right: 8px;
+}
+.control-center-menu .device-icon {
+  color: var(--text-primary);
+}
+.control-center-menu .slider-control {
+  height: 16px;
+}
+.control-center-menu .slider-control::groove {
+  background: var(--color-grey);
+  height: 4px;
+  border-radius: 2px;
+}
+.control-center-menu .slider-control::sub-page {
+  background: var(--color-light-green);
+  border-radius: 2px;
+}
+.control-center-menu .slider-control::handle {
+  background: var(--text-primary);
+  border: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  margin: -4px 0;
+}
+.control-center-menu .value {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  min-width: 36px;
+}
+.control-center-menu .bt-button {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  text-align: left;
+  background-color: var(--bg-hover-secondary);
+  border: 1px solid var(--color-grey);
+  border-radius: 6px;
+  padding: 5px 10px;
+  margin: 2px 10px 2px 10px;
+}
+.control-center-menu .bt-button:hover {
+  background-color: var(--bg-hover-primary);
+}
+.control-center-menu .language-row {
+  padding: 3px 14px;
+}
+.control-center-menu .language-icon {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-normal);
+  color: var(--text-secondary);
+  min-width: 22px;
+  margin-right: 8px;
+}
+.control-center-menu .language-selector {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  color: var(--text-primary);
+  background-color: var(--bg-hover-secondary);
+  border: 1px solid var(--color-grey);
+  border-radius: 6px;
+  padding: 4px 8px;
+  min-height: 22px;
+}
+.control-center-menu .language-selector:hover {
+  background-color: var(--bg-hover-primary);
+}
+.control-center-menu .language-selector::drop-down {
+  border: none;
+  width: 18px;
+}
+.control-center-menu .language-selector::down-arrow {
+  width: 8px;
+  height: 8px;
+}
+.control-center-menu .language-selector QAbstractItemView {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--color-grey);
+  border-radius: 4px;
+  selection-background-color: var(--bg-hover-primary);
+  selection-color: var(--text-primary);
+}
+
+/* Language toggle buttons (control center) */
+.control-center-menu .lang-button {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  color: var(--text-secondary);
+  background-color: var(--bg-hover-secondary);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 5px 10px;
+  min-width: 34px;
+}
+.control-center-menu .lang-button:hover {
+  background-color: var(--bg-hover-primary);
+  color: var(--text-primary);
+}
+.control-center-menu .lang-button:checked {
+  background-color: var(--color-light-green);
+  color: var(--color-black);
+  border-color: var(--color-light-green);
+}
+
+/* Battery charge limit row (control center) */
+.control-center-menu .battery-row {
+  padding: 3px 14px;
+}
+.control-center-menu .battery-icon {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-normal);
+  color: var(--color-light-green);
+  min-width: 22px;
+  margin-right: 8px;
+}
+.control-center-menu .battery-status {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  color: var(--text-primary);
+}
+.control-center-menu .battery-toggle {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  background-color: var(--bg-hover-secondary);
+  border: 1px solid var(--color-grey);
+  border-radius: 6px;
+  padding: 5px 10px;
+}
+.control-center-menu .battery-toggle:hover {
+  background-color: var(--color-light-green);
+  color: var(--color-black);
+}
+
+/* IME input-mode indicator on the bar */
+.ime-indicator {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  padding: 1px 6px;
+  margin-left: 4px;
+  border-radius: 4px;
+  color: var(--text-secondary);
+  background-color: var(--bg-hover-secondary);
+}
+.ime-indicator.native {
+  color: var(--color-black);
+  background-color: var(--color-light-green);
+}
+.ime-indicator.alpha {
+  color: var(--text-primary);
+  background-color: var(--bg-hover-third);
+}
+
+/* Bluetooth */
+.bluetooth-menu {
+  background-color: var(--bg-primary);
+  min-width: 375px;
+  min-height: 375px;
+  max-height: 375px;
+}
+.bluetooth-menu .header {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.bluetooth-menu .header .title {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-normal);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+}
+.bluetooth-menu .header .power-button {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  color: var(--text-secondary);
+  background-color: var(--bg-hover-secondary);
+  border: none;
+  border-radius: var(--radius-normal);
+  padding: 4px 10px;
+}
+.bluetooth-menu .header .power-button:hover {
+  background-color: var(--bg-hover-primary);
+  color: var(--text-primary);
+}
+.bluetooth-menu .header .power-button:checked {
+  background-color: var(--color-light-green);
+  color: var(--color-black);
+}
+.bluetooth-menu .progress-bar {
+  background-color: transparent;
+}
+.bluetooth-menu .error-message {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  color: var(--color-light-red);
+  padding: 8px 12px;
+}
+.bluetooth-menu .bluetooth-list {
+  background-color: transparent;
+}
+.bluetooth-menu .section .section-title {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  color: var(--text-secondary);
+  padding: 10px 14px 4px 14px;
+}
+.bluetooth-menu .bluetooth-item {
+  margin: 2px 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius-normal);
+  background-color: var(--bg-hover-secondary);
+}
+.bluetooth-menu .bluetooth-item:hover {
+  background-color: var(--bg-hover-primary);
+}
+.bluetooth-menu .bluetooth-item .icon {
+  font-family: var(--font-name-icons);
+  font-size: var(--text-xl);
+  color: var(--text-secondary);
+  min-width: 28px;
+}
+.bluetooth-menu .bluetooth-item .name {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+}
+.bluetooth-menu .bluetooth-item .status {
+  font-family: var(--font-name-primary);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.bluetooth-menu .bluetooth-item .battery {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  color: var(--text-secondary);
+}
+.bluetooth-menu .bluetooth-item .battery-icon {
+  font-family: var(--font-name-icons);
+  color: var(--color-light-green);
+}
+.bluetooth-menu .bluetooth-item .connect {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  background-color: var(--bg-hover-primary);
+  border: none;
+  border-radius: var(--radius-normal);
+  padding: 4px 12px;
+}
+.bluetooth-menu .bluetooth-item .connect:hover {
+  background-color: var(--bg-hover-third);
+}
+.bluetooth-menu .footer {
+  padding: 10px 14px;
+  border-top: 1px solid var(--border-soft);
+}
+.bluetooth-menu .footer .settings-button {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  color: var(--text-secondary);
+  background-color: transparent;
+  border: none;
+}
+.bluetooth-menu .footer .settings-button:hover {
+  color: var(--text-primary);
+}
+.bluetooth-menu .footer .scan-icon {
+  font-family: var(--font-name-icons);
+  font-size: var(--text-normal);
+  color: var(--text-secondary);
+  background-color: var(--bg-hover-secondary);
+  border: none;
+  border-radius: var(--radius-normal);
+  min-width: 28px;
+  min-height: 24px;
+}
+.bluetooth-menu .footer .scan-icon:hover {
+  background-color: var(--bg-hover-primary);
+  color: var(--text-primary);
+}
+
+/* Systray */
+.systray {
+  background: transparent;
+  border: none;
+  margin: 0;
+  background-color: transparent;
+}
+.systray:hover {
+  background: transparent;
+}
+
+.systray .unpinned-container {
+  border-radius: 0;
+  /* background-color: transparent; */
+  margin: 2px;
+  padding: 0 4px;
+  border-right: 1px solid var(--text-secondary);
+  /* background-color: var(--bg-hover-primary); */
+}
+
+.systray .pinned-container {
+  padding: 0 4px;
+}
+
+.systray .pinned-container:hover {
+  background: transparent;
+}
+
+.systray .pinned-container[forceshow="true"] {
+}
+
+.systray .button {
+  padding: 0px 4px;
+  border-radius: var(--radius-normal);
+  padding: 6px 6px;
+  outline: none;
+}
+
+.systray .button .icon {
+}
+
+.systray .button:hover {
+  background-color: var(--bg-hover-primary);
+}
+
+.systray .button[dragging="true"] {
+  background-color: var(--bg-hover-primary);
+  border-color: var(--color-green);
+}
+
+.systray .unpinned-visibility-btn {
+  border-radius: 0px;
+  height: 20px;
+  width: 16px;
+  outline: none;
+}
+
+.systray .unpinned-visibility-btn:checked {
+}
+
+.systray .unpinned-visibility-btn:hover {
+}
+
+/* Cava */
+.cava-widget {
+  padding: var(--gap-padding);
+  margin: var(--gap-padding);
+}
+.cava-widget .widget-container {
+}
+
+/* Wifi (styled to match the Bluetooth menu) */
+.wifi-menu {
+  background-color: var(--bg-primary);
+  min-width: 375px;
+  min-height: 375px;
+  max-height: 375px;
+}
+.wifi-menu .header {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-normal);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.wifi-menu .progress-bar {
+  background-color: transparent;
+}
+.wifi-menu .error-message {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  color: var(--color-light-red);
+  padding: 8px 12px;
+}
+.wifi-menu .wifi-list {
+  background-color: transparent;
+}
+.wifi-menu .wifi-item {
+  margin: 2px 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius-normal);
+  background-color: var(--bg-hover-secondary);
+}
+.wifi-menu .wifi-item:hover {
+  background-color: var(--bg-hover-primary);
+}
+.wifi-menu .wifi-item[active=true] {
+  background-color: var(--bg-hover-primary);
+  border-radius: var(--radius-normal);
+}
+.wifi-menu .wifi-item .icon {
+  font-family: var(--font-name-icons);
+  font-size: var(--text-xl);
+  color: var(--text-secondary);
+  min-width: 28px;
+}
+.wifi-menu .wifi-item .name {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+}
+.wifi-menu .wifi-item .status {
+  font-family: var(--font-name-primary);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.wifi-menu .wifi-item .password {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  color: var(--text-secondary);
+  background-color: transparent;
+  border: none;
+}
+.wifi-menu .wifi-item .strength {
+  font-family: var(--font-name-primary);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.wifi-menu .wifi-item .controls-container {
+  padding-top: 8px;
+}
+.wifi-menu .wifi-item .connect {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  background-color: var(--bg-hover-primary);
+  border: none;
+  border-radius: var(--radius-normal);
+  padding: 4px 12px;
+}
+.wifi-menu .wifi-item .connect:hover {
+  background-color: var(--bg-hover-third);
+}
+.wifi-menu .wifi-item .connect:pressed {
+  background-color: var(--bg-hover-third);
+}
+.wifi-menu .footer {
+  padding: 10px 14px;
+  border-top: 1px solid var(--border-soft);
+}
+.wifi-menu .footer .settings-button {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  color: var(--text-secondary);
+  background-color: transparent;
+  border: none;
+}
+.wifi-menu .footer .settings-button:hover {
+  color: var(--text-primary);
+}
+.wifi-menu .footer .refresh-icon {
+  font-family: var(--font-name-icons);
+  font-size: var(--text-normal);
+  color: var(--text-secondary);
+  background-color: var(--bg-hover-secondary);
+  border: none;
+  border-radius: var(--radius-normal);
+  min-width: 28px;
+  min-height: 24px;
+}
+.wifi-menu .footer .refresh-icon:hover {
+  background-color: var(--bg-hover-primary);
+  color: var(--text-primary);
+}
+
+/* Media Lite */
+.media-lite-widget {
+  padding: 0;
+  margin: 0;
+}
+.media-lite-widget .text {
+  padding: 0;
+}
+.media-lite-widget .label {
+  font-size: var(--text-small);
+  font-family: var(--font-name-primary);
+  padding: 0 2px;
+}
+.media-lite-widget .title {
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  font-family: var(--font-name-primary);
+  padding: 0 2px;
+}
+.media-lite-widget .artist {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-name-primary);
+  padding: 0 2px;
+}
+
+/* Media Lite popup */
+.media-lite-menu {
+  min-width: 280px;
+  max-width: 280px;
+  background-color: var(--bg-primary);
+}
+.media-lite-menu .header {
+  padding: 16px 16px 0 16px;
+}
+.media-lite-menu .thumbnail {
+  cursor: pointer;
+}
+.media-lite-menu .controls {
+  padding: 32px 16px 32px 16px;
+}
+.media-lite-menu .title {
+  font-size: 15px;
+  font-weight: var(--font-bold);
+  font-family: var(--font-name-primary);
+}
+.media-lite-menu .artist {
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  color: var(--text-secondary);
+  font-family: var(--font-name-primary);
+  margin-top: 4px;
+  margin-bottom: 16px;
+}
+.media-lite-menu .source {
+  min-width: 16px;
+  min-height: 16px;
+  padding: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+.media-lite-menu .volume-button {
+  font-family: var(--font-name-icons);
+  font-size: 16px;
+  min-width: 24px;
+  min-height: 24px;
+  color: var(--color-volume);
+}
+.media-lite-menu .volume-button.muted {
+  color: var(--color-volume-muted);
+}
+.media-lite-menu .volume-button.unavailable {
+  color: var(--color-volume-unavailable);
+}
+.media-lite-menu .volume-slider-popup {
+  background-color: var(--bg-popup);
+  border: 1px solid var(--bg-popup-border);
+  border-radius: 10px;
+  padding: 12px 8px;
+}
+.media-lite-menu .volume-slider {
+  min-height: 120px;
+  max-height: 120px;
+}
+.media-lite-menu .volume-slider::groove {
+  background: var(--bg-hover-primary);
+  width: 3px;
+  border-radius: 2px;
+}
+.media-lite-menu .volume-slider::sub-page {
+  background: var(--bg-hover-primary);
+  border-radius: 2px;
+}
+.media-lite-menu .volume-slider::add-page {
+  background: var(--color-accent);
+  border-radius: 2px;
+}
+.media-lite-menu .btn {
+  font-family: var(--font-name-icons);
+  font-size: var(--text-normal);
+  font-weight: var(--font-normal);
+  margin: 4px 2px;
+  min-width: 40px;
+  max-width: 40px;
+  min-height: 40px;
+  max-height: 40px;
+  border-radius: 20px;
+  transition: background-color 0.08s, opacity 0.08s;
+  opacity: 1;
+  cursor: pointer;
+}
+.media-lite-menu .btn:clicked,
+.media-lite-menu .btn:pressed {
+  opacity: 0.5;
+}
+.media-lite-menu .btn:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-hover-primary);
+}
+.media-lite-menu .btn.play {
+  background-color: var(--color-accent);
+  color: var(--color-black);
+  font-size: 20px;
+}
+.media-lite-menu .btn.shuffle.active,
+.media-lite-menu .btn.repeat.active {
+  color: var(--color-active);
+}
+.media-lite-menu .btn.disabled:hover,
+.media-lite-menu .btn.disabled {
+  color: var(--color-disabled);
+  background-color: transparent;
+  opacity: 1;
+  cursor: default;
+}
+.media-lite-menu .playback-time {
+  font-size: 11px;
+  font-family: var(--font-name-primary);
+  color: var(--text-muted);
+}
+.media-lite-menu .progress-slider {
+  height: 10px;
+  margin: 2px 0;
+  border-radius: 3px;
+}
+.media-lite-menu .progress-slider::groove {
+  background: var(--bg-hover-primary);
+  height: 2px;
+  border-radius: 3px;
+}
+.media-lite-menu .progress-slider::groove:hover {
+  height: 6px;
+  background: var(--bg-hover-third);
+}
+.media-lite-menu .progress-slider::sub-page {
+  background: var(--color-accent);
+  border-radius: 3px;
+}

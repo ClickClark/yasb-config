@@ -1,0 +1,15 @@
+# Logs
+*.log
+*.log.*
+
+# Backups
+*.backup
+*.bak
+
+# Python build artifacts
+__pycache__/
+*.pyc
+
+# OS junk
+Thumbs.db
+Desktop.ini
