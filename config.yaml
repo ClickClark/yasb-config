@@ -205,9 +205,9 @@ widgets:
       label: "<span>{icon}</span> {temp}"
       label_alt: "<span>{icon}</span> {location}: {temp}, Min {min_temp}, Max {max_temp}, Wind {wind}"
       api_key: "YOUR_WEATHERAPI_KEY" # Get your free API key from https://www.weatherapi.com/
-      update_interval: 600 # Update interval in seconds, Min 600 seconds
+      update_interval: 43200 # Update interval in seconds, Min 600 seconds
       hide_decimal: true
-      location: "London, England" # You can use "USA Los Angeles 90006" {COUNTRY CITY ZIP_CODE}, or just city.
+      location: "auto:ip" # You can use "USA Los Angeles 90006" {COUNTRY CITY ZIP_CODE}, or just city.
       callbacks:
         on_left: "toggle_card"
         on_middle: "toggle_label"
