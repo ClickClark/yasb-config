@@ -366,6 +366,12 @@ widgets:
         offset_top: 6
         offset_left: 0
         show_language: true
+        show_wallpapers: true
+        wallpaper_path: "D:/clark/Pictures/Wallpapers"
+        wallpaper_columns: 3
+        wallpaper_thumb_width: 108
+        wallpaper_thumb_height: 61
+        wallpaper_corner_radius: 8
       callbacks:
         on_left: "toggle_menu"
         on_middle: "do_nothing"

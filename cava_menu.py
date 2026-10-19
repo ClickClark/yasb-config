@@ -12,12 +12,23 @@ re-installed after every YASB update, because updates overwrite library.zip.
 
 import ctypes
 import logging
+import math
+import os
+import random
 import re
 import struct
 import winreg
 from ctypes import wintypes
 
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import QSize, Qt, QTimer, QUrl
+from PyQt6.QtGui import (
+    QDesktopServices,
+    QIcon,
+    QImageReader,
+    QPainter,
+    QPainterPath,
+    QPixmap,
+)
 from PyQt6.QtWidgets import (
     QComboBox,
     QFrame,
@@ -25,6 +36,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
+    QScrollArea,
     QSlider,
     QVBoxLayout,
 )
@@ -135,6 +147,46 @@ except Exception:
     _HAS_ATKACPI = False
     logging.warning("CavaMenuWidget: ASUS ATKACPI support unavailable")
 
+# Desktop wallpaper support. SPI_SETDESKWALLPAPER updates the registry and
+# broadcasts WM_SETTINGCHANGE, so Explorer repaints without any extra work.
+SPI_SETDESKWALLPAPER = 0x0014
+SPIF_UPDATEINIFILE = 0x0001
+SPIF_SENDCHANGE = 0x0002
+WALLPAPER_EXTENSIONS = (".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tif", ".tiff", ".webp")
+WALLPAPERS_KEY = r"Control Panel\Desktop"
+
+try:
+    _wallpaper_user32 = ctypes.WinDLL("user32")
+    _wallpaper_user32.SystemParametersInfoW.argtypes = [
+        wintypes.UINT,
+        wintypes.UINT,
+        wintypes.LPCWSTR,
+        wintypes.UINT,
+    ]
+    _wallpaper_user32.SystemParametersInfoW.restype = wintypes.BOOL
+    _HAS_WALLPAPERS = True
+except Exception:
+    _wallpaper_user32 = None
+    _HAS_WALLPAPERS = False
+    logging.warning("CavaMenuWidget: wallpaper support unavailable")
+
+# Read the *source* wallpaper path. The registry keeps the transcoded cache
+# path, which never matches a file in the gallery, so prefer the shell COM
+# interface and only fall back to the registry if it is unavailable.
+try:
+    import comtypes.client
+    import pythoncom
+    from comtypes import GUID
+
+    from core.utils.win32.bindings.shell32 import IDesktopWallpaper
+
+    _DESKTOP_WALLPAPER_CLSID = GUID("{C2CF3110-460E-4fc1-B9D0-8A1C0C9CC4BD}")
+    _HAS_WALLPAPER_COM = True
+except Exception:
+    _DESKTOP_WALLPAPER_CLSID = None
+    _HAS_WALLPAPER_COM = False
+    logging.warning("CavaMenuWidget: wallpaper COM lookup unavailable")
+
 
 class CavaMenuConfig(CavaConfig):
     """Extends CavaConfig with the popup control-centre options."""
@@ -149,6 +201,12 @@ class CavaMenuConfig(CavaConfig):
         offset_top: int = 6
         offset_left: int = 0
         show_language: bool = True
+        show_wallpapers: bool = True
+        wallpaper_path: str = r"D:\clark\Pictures\Wallpapers"
+        wallpaper_columns: int = 3
+        wallpaper_thumb_width: int = 108
+        wallpaper_thumb_height: int = 61
+        wallpaper_corner_radius: int = 8
 
     menu: MenuConfig = MenuConfig()
 
@@ -178,6 +236,11 @@ class CavaMenuWidget(CavaWidget):
         self._battery_limit = None
         self._battery_care_limit = 80
         self._battery_available = False
+        self._wallpaper_menu = None
+        self._wallpaper_tiles = {}
+        self._wallpaper_caption = None
+        self._wallpaper_files = []
+        self._wallpaper_thumbs = {}
 
         if _HAS_ATKACPI:
             limit = self._read_battery_care_limit()
@@ -329,6 +392,7 @@ class CavaMenuWidget(CavaWidget):
             self._focused_window_hwnd = None
 
     def _show_menu(self):
+        self._hide_wallpaper_menu()
         menu_cfg = self.config.menu
         self._menu = PopupWidget(
             self,
@@ -347,8 +411,13 @@ class CavaMenuWidget(CavaWidget):
 
         self._build_header(layout)
 
-        if self._bt_menu is not None:
+        has_bluetooth = self._bt_menu is not None
+        has_wallpapers = bool(menu_cfg.show_wallpapers and _HAS_WALLPAPERS)
+        if has_bluetooth:
             self._build_bluetooth_button(layout)
+        if has_wallpapers:
+            self._build_wallpaper_button(layout)
+        if has_bluetooth or has_wallpapers:
             self._add_divider(layout)
 
         if menu_cfg.show_language:
@@ -416,6 +485,41 @@ class CavaMenuWidget(CavaWidget):
         divider.setProperty("class", "cc-divider")
         divider.setFixedHeight(1)
         layout.addWidget(divider)
+
+    def _build_nav_tile(self, layout, icon_text, label_text, tooltip, handler):
+        """A full-width navigation row with a fixed-width icon column.
+
+        The Nerd Font glyphs have different advance widths (the Bluetooth and
+        image icons are 11px vs 15px), so embedding icon+label in the button
+        text makes the two tiles' labels start at different positions. A fixed
+        icon column keeps every tile's text aligned.
+        """
+        button = QPushButton()
+        button.setProperty("class", "bt-button")
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.setToolTip(tooltip)
+        button.setAccessibleName(label_text)
+        button.setFixedHeight(28)
+        button.clicked.connect(handler)
+
+        row = QHBoxLayout(button)
+        row.setContentsMargins(14, 0, 10, 0)
+        row.setSpacing(8)
+
+        icon = QLabel(icon_text)
+        icon.setProperty("class", "bt-icon")
+        icon.setFixedWidth(16)
+        icon.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        icon.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
+        row.addWidget(icon)
+
+        label = QLabel(label_text)
+        label.setProperty("class", "bt-label")
+        label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
+        row.addWidget(label, 1)
+
+        layout.addWidget(button)
+        return button
 
     # ------------------------------------------------------------------
     # Keyboard language
@@ -1290,6 +1394,316 @@ class CavaMenuWidget(CavaWidget):
             logging.exception("CavaMenuWidget: failed to set brightness")
 
     # ------------------------------------------------------------------
+    # Wallpapers
+    # ------------------------------------------------------------------
+    @staticmethod
+    def _normalise_path(path):
+        if not path:
+            return ""
+        return os.path.normcase(os.path.normpath(path))
+
+    @staticmethod
+    def _scan_wallpapers(folder):
+        files = []
+        if not folder or not os.path.isdir(folder):
+            return files
+        try:
+            for root, _dirs, names in os.walk(folder):
+                for name in names:
+                    if name.lower().endswith(WALLPAPER_EXTENSIONS):
+                        files.append(os.path.join(root, name))
+        except OSError:
+            logging.exception("CavaMenuWidget: failed to scan wallpaper folder")
+        files.sort(key=lambda path: os.path.basename(path).lower())
+        return files
+
+    @staticmethod
+    def _current_wallpaper_path():
+        if _HAS_WALLPAPER_COM:
+            try:
+                pythoncom.CoInitialize()
+                desktop = comtypes.client.CreateObject(
+                    _DESKTOP_WALLPAPER_CLSID, interface=IDesktopWallpaper
+                )
+                path = desktop.GetWallpaper(None)
+                if path:
+                    return path
+            except Exception:
+                logging.debug("CavaMenuWidget: COM wallpaper lookup failed", exc_info=True)
+        try:
+            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, WALLPAPERS_KEY) as key:
+                value, _ = winreg.QueryValueEx(key, "Wallpaper")
+            return value or None
+        except OSError:
+            return None
+
+    @staticmethod
+    def _rounded_pixmap(pixmap, width, height, radius):
+        result = QPixmap(width, height)
+        result.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(result)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform, True)
+        clip = QPainterPath()
+        clip.addRoundedRect(0.0, 0.0, float(width), float(height), float(radius), float(radius))
+        painter.setClipPath(clip)
+        painter.drawPixmap(0, 0, pixmap)
+        painter.end()
+        return result
+
+    def _wallpaper_thumbnail(self, path, width, height, radius):
+        try:
+            stat = os.stat(path)
+        except OSError:
+            return None
+        key = (path, int(stat.st_mtime), stat.st_size, width, height, radius)
+        cached = self._wallpaper_thumbs.get(key)
+        if cached is not None:
+            return cached
+
+        reader = QImageReader(path)
+        reader.setAutoTransform(True)
+        size = reader.size()
+        if size.isValid() and size.width() > 0 and size.height() > 0:
+            scale = max(width / size.width(), height / size.height())
+            reader.setScaledSize(
+                QSize(
+                    max(1, math.ceil(size.width() * scale)),
+                    max(1, math.ceil(size.height() * scale)),
+                )
+            )
+        image = reader.read()
+        if image.isNull():
+            return None
+        pixmap = QPixmap.fromImage(image)
+        if pixmap.width() < width or pixmap.height() < height:
+            pixmap = pixmap.scaled(
+                QSize(width, height),
+                Qt.AspectRatioMode.KeepAspectRatioByExpanding,
+                Qt.TransformationMode.SmoothTransformation,
+            )
+        x = max(0, (pixmap.width() - width) // 2)
+        y = max(0, (pixmap.height() - height) // 2)
+        cropped = pixmap.copy(x, y, width, height)
+        thumb = self._rounded_pixmap(cropped, width, height, radius)
+        self._wallpaper_thumbs[key] = thumb
+        return thumb
+
+    def _build_wallpaper_button(self, layout):
+        """Full-width navigation tile that opens the wallpaper gallery, matching
+        the Bluetooth tile above it."""
+        try:
+            self._build_nav_tile(
+                layout,
+                "\uf03e",
+                "Wallpapers",
+                "Browse and change the desktop wallpaper",
+                self._open_wallpapers,
+            )
+        except Exception:
+            logging.exception("CavaMenuWidget: failed to build wallpaper button")
+
+    def _hide_wallpaper_menu(self):
+        try:
+            if is_valid_qobject(self._wallpaper_menu) and self._wallpaper_menu.isVisible():
+                self._wallpaper_menu.hide_animated()
+        except Exception:
+            pass
+
+    def _open_wallpapers(self):
+        try:
+            if is_valid_qobject(self._menu) and self._menu.isVisible():
+                self._menu.hide_animated()
+        except Exception:
+            pass
+        self._show_wallpaper_menu()
+
+    def _show_wallpaper_menu(self):
+        menu_cfg = self.config.menu
+        self._wallpaper_files = self._scan_wallpapers(menu_cfg.wallpaper_path)
+        self._wallpaper_tiles = {}
+        self._wallpaper_caption = None
+
+        self._wallpaper_menu = PopupWidget(
+            self,
+            menu_cfg.blur,
+            menu_cfg.round_corners,
+            menu_cfg.round_corners_type,
+            menu_cfg.border_color,
+        )
+        self._wallpaper_menu.setProperty("class", "wallpaper-menu")
+        self._wallpaper_menu.destroyed.connect(self._on_wallpaper_menu_destroyed)
+        layout = QVBoxLayout(self._wallpaper_menu)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+
+        header = QFrame()
+        header.setProperty("class", "cc-header")
+        header_layout = QHBoxLayout(header)
+        header_layout.setContentsMargins(0, 0, 0, 0)
+        header_layout.setSpacing(0)
+
+        icon = QLabel("\uf03e")
+        icon.setProperty("class", "cc-header-icon")
+        header_layout.addWidget(icon)
+
+        title = QLabel("Wallpapers")
+        title.setProperty("class", "cc-title")
+        header_layout.addWidget(title, 1)
+
+        count = QLabel(str(len(self._wallpaper_files)))
+        count.setProperty("class", "wallpaper-count")
+        header_layout.addWidget(count)
+
+        shuffle = QPushButton("\uf074")
+        shuffle.setProperty("class", "cc-refresh")
+        shuffle.setCursor(Qt.CursorShape.PointingHandCursor)
+        shuffle.setToolTip("Pick a random wallpaper")
+        shuffle.clicked.connect(self._shuffle_wallpaper)
+        header_layout.addWidget(shuffle)
+
+        folder = QPushButton("\uf07b")
+        folder.setProperty("class", "cc-refresh")
+        folder.setCursor(Qt.CursorShape.PointingHandCursor)
+        folder.setToolTip("Open the wallpaper folder")
+        folder.clicked.connect(self._open_wallpaper_folder)
+        header_layout.addWidget(folder)
+
+        layout.addWidget(header)
+
+        if self._wallpaper_files:
+            self._build_wallpaper_grid(layout, menu_cfg)
+        else:
+            empty = QLabel(f"No wallpapers found in {menu_cfg.wallpaper_path}")
+            empty.setProperty("class", "wallpaper-empty")
+            empty.setWordWrap(True)
+            layout.addWidget(empty)
+
+        self._wallpaper_caption = QLabel()
+        self._wallpaper_caption.setProperty("class", "wallpaper-caption")
+        self._wallpaper_caption.setFixedHeight(20)
+        layout.addWidget(self._wallpaper_caption)
+
+        # Fill the caption/check state before sizing so the label's height is
+        # part of sizeHint (an empty caption would make the popup 20px short).
+        self._refresh_wallpaper_selection()
+
+        columns = max(1, int(menu_cfg.wallpaper_columns))
+        thumb_width = max(32, int(menu_cfg.wallpaper_thumb_width))
+        self._wallpaper_menu.ensurePolished()
+        self._wallpaper_menu.setFixedWidth(columns * thumb_width + (columns - 1) * 8 + 32)
+        self._wallpaper_menu.adjustSize()
+        self._wallpaper_menu.setPosition(
+            menu_cfg.alignment,
+            menu_cfg.direction,
+            menu_cfg.offset_left,
+            menu_cfg.offset_top,
+        )
+        self._wallpaper_menu.show()
+
+    def _build_wallpaper_grid(self, layout, menu_cfg):
+        columns = max(1, int(menu_cfg.wallpaper_columns))
+        thumb_width = max(32, int(menu_cfg.wallpaper_thumb_width))
+        thumb_height = max(32, int(menu_cfg.wallpaper_thumb_height))
+        radius = max(0, int(menu_cfg.wallpaper_corner_radius))
+        spacing = 8
+
+        grid_frame = QFrame()
+        grid_frame.setProperty("class", "wallpaper-grid")
+        grid = QGridLayout(grid_frame)
+        grid.setContentsMargins(10, 8, 10, 8)
+        grid.setHorizontalSpacing(spacing)
+        grid.setVerticalSpacing(spacing)
+
+        for index, path in enumerate(self._wallpaper_files):
+            button = QPushButton()
+            button.setProperty("class", "wallpaper-tile")
+            button.setCheckable(True)
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            button.setFixedSize(thumb_width, thumb_height)
+            button.setIconSize(QSize(thumb_width, thumb_height))
+            button.setToolTip(os.path.basename(path))
+            thumb = self._wallpaper_thumbnail(path, thumb_width, thumb_height, radius)
+            if thumb is not None:
+                button.setIcon(QIcon(thumb))
+            button.clicked.connect(
+                lambda checked=False, wallpaper=path: self._apply_wallpaper(wallpaper)
+            )
+            grid.addWidget(button, index // columns, index % columns)
+            self._wallpaper_tiles[path] = button
+
+        rows = math.ceil(len(self._wallpaper_files) / columns)
+        content_height = rows * thumb_height + (rows - 1) * spacing + 16
+        scroll = QScrollArea()
+        scroll.setProperty("class", "wallpaper-scroll")
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        scroll.setWidget(grid_frame)
+        scroll.setFixedHeight(min(content_height, 440))
+        layout.addWidget(scroll)
+
+    def _on_wallpaper_menu_destroyed(self, *args):
+        self._wallpaper_menu = None
+        self._wallpaper_tiles = {}
+        self._wallpaper_caption = None
+        self._wallpaper_files = []
+
+    def _refresh_wallpaper_selection(self, current_path=None):
+        current = self._normalise_path(
+            current_path if current_path is not None else self._current_wallpaper_path()
+        )
+        active = None
+        for path, button in self._wallpaper_tiles.items():
+            if not is_valid_qobject(button):
+                continue
+            is_active = self._normalise_path(path) == current
+            button.setChecked(is_active)
+            if is_active:
+                active = path
+        caption = self._wallpaper_caption
+        if caption is not None and is_valid_qobject(caption):
+            if active is not None:
+                caption.setText(os.path.basename(active))
+            elif current:
+                caption.setText(os.path.basename(current))
+            else:
+                caption.setText("No wallpaper selected")
+
+    def _apply_wallpaper(self, path):
+        if not _HAS_WALLPAPERS or not os.path.isfile(path):
+            return False
+        try:
+            changed = _wallpaper_user32.SystemParametersInfoW(
+                SPI_SETDESKWALLPAPER,
+                0,
+                path,
+                SPIF_UPDATEINIFILE | SPIF_SENDCHANGE,
+            )
+        except Exception:
+            logging.exception("CavaMenuWidget: failed to set wallpaper")
+            return False
+        if not changed:
+            logging.warning("CavaMenuWidget: Windows rejected wallpaper %s", path)
+            return False
+        self._refresh_wallpaper_selection(path)
+        return True
+
+    def _shuffle_wallpaper(self):
+        if not self._wallpaper_tiles:
+            return
+        current = self._normalise_path(self._current_wallpaper_path())
+        choices = [
+            path for path in self._wallpaper_tiles if self._normalise_path(path) != current
+        ] or list(self._wallpaper_tiles)
+        self._apply_wallpaper(random.choice(choices))
+
+    def _open_wallpaper_folder(self):
+        folder = self.config.menu.wallpaper_path
+        if folder and os.path.isdir(folder):
+            QDesktopServices.openUrl(QUrl.fromLocalFile(folder))
+
+    # ------------------------------------------------------------------
     # Bluetooth
     # ------------------------------------------------------------------
     def _build_bluetooth_button(self, layout):
@@ -1297,16 +1711,18 @@ class CavaMenuWidget(CavaWidget):
         below the header so it reads as a primary action rather than an
         afterthought at the bottom of the popup."""
         try:
-            bt_button = QPushButton("\uf293  Bluetooth")
-            bt_button.setProperty("class", "bt-button")
-            bt_button.setCursor(Qt.CursorShape.PointingHandCursor)
-            bt_button.setToolTip("Open Bluetooth devices")
-            bt_button.clicked.connect(self._open_bluetooth)
-            layout.addWidget(bt_button)
+            self._build_nav_tile(
+                layout,
+                "\uf293",
+                "Bluetooth",
+                "Open Bluetooth devices",
+                self._open_bluetooth,
+            )
         except Exception:
             logging.exception("CavaMenuWidget: failed to build bluetooth button")
 
     def _open_bluetooth(self):
+        self._hide_wallpaper_menu()
         try:
             if self._menu is not None and self._menu.isVisible():
                 self._menu.hide_animated()

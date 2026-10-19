@@ -634,11 +634,22 @@ font-size: var(--text-normal);
   background-color: var(--bg-hover-secondary);
   border: 1px solid var(--color-grey);
   border-radius: 6px;
-  padding: 5px 10px;
+  padding: 0;
   margin: 2px 10px 2px 10px;
 }
 .control-center-menu .bt-button:hover {
   background-color: var(--bg-hover-primary);
+}
+.control-center-menu .bt-icon {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-normal);
+  color: var(--text-secondary);
+}
+.control-center-menu .bt-label {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
 }
 .control-center-menu .language-row {
   padding: 3px 14px;
@@ -731,6 +742,98 @@ font-size: var(--text-normal);
 .control-center-menu .battery-toggle:hover {
   background-color: var(--color-light-green);
   color: var(--color-black);
+}
+
+/* Wallpaper gallery (control centre) */
+.wallpaper-menu {
+  background-color: var(--bg-primary);
+  padding: 4px 0 6px 0;
+}
+.wallpaper-menu .cc-header {
+  padding: 6px 14px 8px 14px;
+}
+.wallpaper-menu .cc-header-icon {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  margin-right: 10px;
+}
+.wallpaper-menu .cc-title {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-normal);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+}
+.wallpaper-menu .cc-refresh {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-normal);
+  color: var(--text-secondary);
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+.wallpaper-menu .cc-refresh:hover {
+  background-color: var(--bg-hover-primary);
+  color: var(--text-primary);
+}
+.wallpaper-menu .wallpaper-count {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  font-weight: var(--font-bold);
+  color: var(--text-muted);
+  padding-right: 6px;
+}
+.wallpaper-menu .wallpaper-scroll,
+.wallpaper-menu .wallpaper-grid {
+  background: transparent;
+  border: none;
+}
+.wallpaper-menu .wallpaper-tile {
+  background-color: var(--bg-hover-secondary);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 0;
+}
+.wallpaper-menu .wallpaper-tile:hover {
+  background-color: var(--bg-hover-primary);
+  border-color: var(--color-light-grey);
+}
+.wallpaper-menu .wallpaper-tile:checked {
+  border-color: var(--color-light-green);
+}
+.wallpaper-menu .wallpaper-caption {
+  font-family: var(--font-name-primary);
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding: 6px 14px 0 14px;
+}
+.wallpaper-menu .wallpaper-empty {
+  font-family: var(--font-name-primary);
+  font-size: var(--text-small);
+  color: var(--text-muted);
+  padding: 12px 14px;
+}
+.wallpaper-menu .wallpaper-scroll QScrollBar:vertical {
+  background: transparent;
+  width: 6px;
+  margin: 2px 0;
+}
+.wallpaper-menu .wallpaper-scroll QScrollBar::handle:vertical {
+  background: var(--color-grey);
+  border-radius: 3px;
+  min-height: 24px;
+}
+.wallpaper-menu .wallpaper-scroll QScrollBar::handle:vertical:hover {
+  background: var(--color-light-grey);
+}
+.wallpaper-menu .wallpaper-scroll QScrollBar::add-line:vertical,
+.wallpaper-menu .wallpaper-scroll QScrollBar::sub-line:vertical {
+  height: 0;
+}
+.wallpaper-menu .wallpaper-scroll QScrollBar::add-page:vertical,
+.wallpaper-menu .wallpaper-scroll QScrollBar::sub-page:vertical {
+  background: transparent;
 }
 
 /* IME input-mode indicator on the bar */
